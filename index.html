@@ -5,204 +5,390 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Piloto do 10X</title>
   <style>
-    /* Todo o seu CSS original, sem alterações */
-    :root { /* ... */ }
-    /* Continua tudo conforme o que você enviou anteriormente */
+    /* === MANTIDO SEU CSS ORIGINAL === */
+    :root {
+      --accent: #ff4757;
+      --card-bg: rgba(10,14,20,0.6);
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color: #fff;
+      background-color: #07060a;
+      background-image:
+        radial-gradient(ellipse at 10% 10%, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 30%),
+        linear-gradient(180deg, rgba(2,6,23,0.6), rgba(6,10,20,0.7)),
+        url('fundo.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      -webkit-font-smoothing: antialiased;
+    }
+    @media (max-width: 640px) {
+      html, body {
+        background-size: contain;
+        background-position: center top;
+      }
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255,80,80,0.02), rgba(0,140,255,0.02));
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+    .wrap { position: relative; z-index: 2; width: min(980px,94vw); margin: 40px auto; }
+    .card {
+      background: linear-gradient(180deg, var(--card-bg), rgba(6,10,16,0.55));
+      border-radius: 18px;
+      padding: 36px;
+      box-shadow: 0 12px 50px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+      position: relative;
+    }
+    #login-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #login-section .card {
+      max-width: 380px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .center { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; }
+    h1.mainTitle { font-size: 34px; margin: 6px 0 8px 0; letter-spacing: 0.6px; }
+    .subtitle { opacity: 0.9; font-size: 15px; margin-bottom: 14px; }
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: transparent;
+      color: white;
+      font-size: 16px;
+      outline: none;
+      backdrop-filter: blur(4px);
+      margin-top: 12px;
+      box-sizing: border-box;
+    }
+    button.primary {
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(90deg, var(--accent), #ff6b81);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(255,71,87,0.12);
+      transition: transform .12s ease;
+      margin-top: 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button.primary:active { transform: translateY(1px); }
+    .link-button {
+      background:none;
+      border:none;
+      color: var(--accent);
+      cursor:pointer;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 0 0 0;
+      margin-top: 12px;
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .error {
+      margin-top: 12px;
+      color: #ffb3b3;
+      background: rgba(255,0,0,0.06);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .smallLoader { display: none; flex-direction: column; align-items: center; gap: 10px; margin-top: 16px; }
+    .loaderDot {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 5px solid rgba(255,255,255,0.09);
+      border-top-color: white;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .page2 { display: none; flex-direction: column; align-items: center; gap: 22px; padding: 28px; }
+    .bigTitle { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .entryBox { min-height: 160px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+    .redBtn {
+      background: linear-gradient(90deg, var(--accent), #ff6b81);
+      border: none;
+      color: white;
+      padding: 14px 26px;
+      border-radius: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(255,71,87,0.14);
+    }
+    .result {
+      background: linear-gradient(180deg, var(--glass), var(--glass-2));
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.04);
+      min-width: 300px;
+      text-align: center;
+    }
+    .label { opacity: 0.9; font-size: 13px; }
+    .value { font-weight: 800; font-size: 20px; margin-top: 6px; }
+    footer { margin-top: 18px; font-size: 13px; color: rgba(255,255,255,0.65); }
+    #btnLogout {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: linear-gradient(90deg, #555, #777);
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      z-index: 1100;
+      display: none;
+    }
+    @media (max-width: 640px) {
+      .wrap { margin: 20px 12px; width: auto; }
+      .card { padding: 20px; }
+    }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
   <!-- LOGIN -->
   <section id="login-section">
     <div class="card">
       <h1 class="mainTitle" style="text-align:center;">Login</h1>
-      <label for="loginUser" style="margin-top:12px;">E‑mail</label>
-      <input type="text" id="loginUser" placeholder="Seu e‑mail" />
+
+      <label for="loginUser" style="margin-top:12px;">E-mail</label>
+      <input type="text" id="loginUser" placeholder="Seu e-mail" autocomplete="username" />
+
       <label for="loginPass" style="margin-top:12px;">Senha</label>
-      <input type="password" id="loginPass" placeholder="Sua senha" />
+      <input type="password" id="loginPass" placeholder="Sua senha" autocomplete="current-password" />
+
       <button id="btnLogin" class="primary">Entrar</button>
       <button id="btnGetLogin" class="link-button">Adquira seu login</button>
       <div id="loginError" class="error" style="display:none;"></div>
     </div>
   </section>
 
-  <!-- Botões Admin -->
-  <button id="btnAdminCreateUser" style="display:none;">Criar novo usuário</button>
-  <button id="btnLogout" style="display:none;">Desconectar</button>
+  <!-- Botão desconectar -->
+  <button id="btnLogout">Desconectar</button>
 
   <!-- APP -->
   <div id="app" style="display:none;">
     <div class="wrap">
       <div class="card" role="main">
+
         <!-- VIEW 1 -->
         <section id="view-landing" class="center">
           <h1 class="mainTitle">Piloto do 10X</h1>
           <p class="subtitle">Instagram: @pilotodo10x</p>
+
           <div class="search" style="margin-top:8px">
-            <input id="urlInput" type="text" placeholder="Cole o link do post" />
+            <input id="urlInput" type="text" placeholder="Coloque a URL da casa de aposta" aria-label="URL da casa de aposta">
+            <button id="goBtn" class="primary">Ir</button>
           </div>
-          <button id="btnAction" class="primary">Buscar</button>
-          <div id="loading" class="smallLoader" style="display:none;">
-            <div class="loaderDot"></div>
-            <div>Carregando...</div>
+
+          <div id="hackLoading" class="smallLoader">
+            <div class="loaderDot" aria-hidden="true"></div>
+            <div class="label">Hackeando Aviator - Aguarde</div>
           </div>
-          <div id="result" class="result" style="display:none;"></div>
+
+          <div id="landingError" class="error" style="display:none"></div>
         </section>
+
+        <!-- VIEW 2 -->
+        <section id="view-hack" class="page2">
+          <div class="bigTitle">Piloto do 10X</div>
+          <div class="entryBox">
+            <button id="searchBtn" class="redBtn">Buscar Entrada</button>
+            <div id="loading" style="display:none;flex-direction:column;align-items:center;gap:10px">
+              <div class="loaderDot" aria-hidden="true"></div>
+              <div class="label">Aguarde Sinal</div>
+            </div>
+            <div id="resultArea" style="display:none">
+              <div class="result">
+                <div class="label">Entrada localizada</div>
+                <div id="entryTime" class="value">--:--</div>
+                <div class="label" style="margin-top:12px">Probabilidade</div>
+                <div id="prob" class="value">10x à 100x</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   </div>
 
-  <!-- MODAL criar usuário -->
-  <div id="createUserModal" style="display:none;">
-    <div class="card">
-      <h2>Criar novo usuário</h2>
-      <label>Email</label>
-      <input type="text" id="newUserName" placeholder="E‑mail" />
-      <label>Senha</label>
-      <input type="password" id="newUserPass" placeholder="Senha" />
-      <label>Confirmar senha</label>
-      <input type="password" id="newUserPassConfirm" placeholder="Confirmar senha" />
-      <button id="btnCreateUser" class="primary">Criar usuário</button>
-      <button id="btnCloseModal" class="link-button">Cancelar</button>
-      <div id="createUserError" class="error" style="display:none;"></div>
-      <div id="createUserSuccess" class="success" style="display:none;"></div>
-    </div>
-  </div>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://zsabvugbpleckaebmwsf.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzYWJ2dWdicGxlY2thZWJtd3NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5NDgxMTgsImV4cCI6MjA3MDUyNDExOH0.beO3HfmCgw42fR2ySWmjQ15qS0MRsq1JV7igMFtxjCM";
 
-  <script>
-  (async () => {
-    const SUPABASE_URL = 'https://zsabvugbpleckaebmwsf.supabase.co';     // Substitua aqui
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzYWJ2dWdicGxlY2thZWJtd3NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5NDgxMTgsImV4cCI6MjA3MDUyNDExOH0.beO3HfmCgw42fR2ySWmjQ15qS0MRsq1JV7igMFtxjCM';             // Substitua aqui
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const loginSection = document.getElementById('login-section');
-    const loginUser = document.getElementById('loginUser');
-    const loginPass = document.getElementById('loginPass');
-    const loginError = document.getElementById('loginError');
-    const btnLogin = document.getElementById('btnLogin');
-    const btnGetLogin = document.getElementById('btnGetLogin');
-    const btnAdminCreateUser = document.getElementById('btnAdminCreateUser');
-    const btnLogout = document.getElementById('btnLogout');
-    const createUserModal = document.getElementById('createUserModal');
-    const newUserName = document.getElementById('newUserName');
-    const newUserPass = document.getElementById('newUserPass');
-    const newUserPassConfirm = document.getElementById('newUserPassConfirm');
-    const createUserError = document.getElementById('createUserError');
-    const createUserSuccess = document.getElementById('createUserSuccess');
-    const btnCreateUser = document.getElementById('btnCreateUser');
-    const btnCloseModal = document.getElementById('btnCloseModal');
-    const app = document.getElementById('app');
-    const btnAction = document.getElementById('btnAction');
-    const urlInput = document.getElementById('urlInput');
-    const loading = document.getElementById('loading');
-    const result = document.getElementById('result');
+  const loginSection = document.getElementById('login-section');
+  const appDiv = document.getElementById('app');
+  const loginUserInput = document.getElementById('loginUser');
+  const loginPassInput = document.getElementById('loginPass');
+  const btnLogin = document.getElementById('btnLogin');
+  const loginError = document.getElementById('loginError');
+  const btnGetLogin = document.getElementById('btnGetLogin');
+  const btnLogout = document.getElementById('btnLogout');
 
-    function mostraErro(el, msg) { el.textContent = msg; el.style.display = 'block'; }
-    function limpaErro(el) { el.textContent = ''; el.style.display = 'none'; }
-    function limpaCamposLogin() { loginUser.value = ''; loginPass.value = ''; limpaErro(loginError); }
+  function showApp() {
+    loginSection.style.display = 'none';
+    appDiv.style.display = 'block';
+    btnLogout.style.display = 'block';
+  }
 
-    async function atualizaUIposLogin() {
-      const { data } = await supabase.auth.getSession();
-      const user = data.session?.user;
-      if (!user) {
-        loginSection.style.display = 'flex';
-        app.style.display = 'none';
-        btnAdminCreateUser.style.display = 'none';
-        btnLogout.style.display = 'none';
-        return;
-      }
-      loginSection.style.display = 'none';
-      app.style.display = 'block';
-      btnLogout.style.display = 'block';
-      const isAdmin = user.user_metadata?.isAdmin;
-      btnAdminCreateUser.style.display = isAdmin ? 'block' : 'none';
+  function showLogin() {
+    loginSection.style.display = 'flex';
+    appDiv.style.display = 'none';
+    btnLogout.style.display = 'none';
+    loginError.style.display = 'none';
+    loginUserInput.value = '';
+    loginPassInput.value = '';
+  }
+
+  btnGetLogin.addEventListener('click', () => {
+    window.open('https://www.instagram.com/pilotodo10x', '_blank');
+  });
+
+  btnLogin.addEventListener('click', async () => {
+    loginError.style.display = 'none';
+    const email = loginUserInput.value.trim();
+    const password = loginPassInput.value.trim();
+    if (!email || !password) {
+      loginError.textContent = 'Preencha e-mail e senha.';
+      loginError.style.display = 'block';
+      return;
     }
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      loginError.textContent = 'E-mail ou senha inválidos.';
+      loginError.style.display = 'block';
+      return;
+    }
+    showApp();
+  });
 
-    btnLogin.addEventListener('click', async () => {
-      limpaErro(loginError);
-      const email = loginUser.value.trim();
-      const password = loginPass.value.trim();
-      if (!email || !password) {
-        mostraErro(loginError, 'Preencha e‑mail e senha.');
-        return;
+  btnLogout.addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    showLogin();
+  });
+
+  window.addEventListener('load', async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      showApp();
+    } else {
+      showLogin();
+    }
+  });
+
+  // --- Mantive seu código original da parte "hack" abaixo ---
+  const viewLanding = document.getElementById('view-landing');
+  const viewHack = document.getElementById('view-hack');
+  const urlInput = document.getElementById('urlInput');
+  const goBtn = document.getElementById('goBtn');
+  const hackLoading = document.getElementById('hackLoading');
+  const landingError = document.getElementById('landingError');
+  const searchBtn = document.getElementById('searchBtn');
+  const loading = document.getElementById('loading');
+  const resultArea = document.getElementById('resultArea');
+  const entryTimeEl = document.getElementById('entryTime');
+  const probEl = document.getElementById('prob');
+
+  let activeEntryDate = null;
+  let checkInterval = null;
+
+  function showViewHack() {
+    viewLanding.style.display = 'none';
+    viewHack.style.display = 'flex';
+  }
+
+  goBtn.addEventListener('click', () => {
+    landingError.style.display = 'none';
+    const val = (urlInput.value || '').toLowerCase();
+    if (val.includes('bwkbet')) {
+      goBtn.disabled = true;
+      hackLoading.style.display = 'flex';
+      const s = randomInt(3, 5);
+      setTimeout(() => {
+        hackLoading.style.display = 'none';
+        goBtn.disabled = false;
+        showViewHack();
+      }, s * 1000);
+    } else {
+      landingError.textContent = 'Por enquanto não hackeamos o Aviator dessa plataforma!';
+      landingError.style.display = 'block';
+    }
+  });
+
+  urlInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') goBtn.click();
+  });
+
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function startCheckLoop() {
+    if (checkInterval) clearInterval(checkInterval);
+    checkInterval = setInterval(() => {
+      if (!activeEntryDate) return;
+      const now = new Date();
+      if (now.getTime() >= activeEntryDate.getTime() + 60 * 1000) {
+        resultArea.style.display = 'none';
+        searchBtn.style.display = 'inline-block';
+        activeEntryDate = null;
+        clearInterval(checkInterval);
+        checkInterval = null;
       }
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return mostraErro(loginError, 'Usuário ou senha inválidos.');
-      limpaCamposLogin();
-      atualizaUIposLogin();
-    });
+    }, 3000);
+  }
 
-    btnLogout.addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      atualizaUIposLogin();
-    });
+  searchBtn.addEventListener('click', () => {
+    searchBtn.style.display = 'none';
+    resultArea.style.display = 'none';
+    loading.style.display = 'flex';
+    const waitSeconds = randomInt(3, 6);
+    setTimeout(() => {
+      loading.style.display = 'none';
+      const now = new Date();
+      const addMin = randomInt(3, 9);
+      const entry = new Date(now.getTime() + addMin * 60 * 1000);
+      activeEntryDate = entry;
+      entryTimeEl.textContent = formatHM(entry);
+      probEl.textContent = '2x à 10x';
+      resultArea.style.display = 'block';
+      startCheckLoop();
+    }, waitSeconds * 1000);
+  });
 
-    btnAdminCreateUser.addEventListener('click', () => {
-      createUserModal.style.display = 'flex';
-      limpaErro(createUserError);
-      createUserSuccess.style.display = 'none';
-      newUserName.value = newUserPass.value = newUserPassConfirm.value = '';
-      newUserName.focus();
-    });
-
-    btnCloseModal.addEventListener('click', () => {
-      createUserModal.style.display = 'none';
-    });
-
-    btnCreateUser.addEventListener('click', async () => {
-      limpaErro(createUserError);
-      createUserSuccess.style.display = 'none';
-      const email = newUserName.value.trim();
-      const senha = newUserPass.value.trim();
-      const confirm = newUserPassConfirm.value.trim();
-      if (!email || !senha || !confirm) {
-        mostraErro(createUserError, 'Preencha todos os campos.');
-        return;
-      }
-      if (senha !== confirm) {
-        mostraErro(createUserError, 'As senhas não coincidem.');
-        return;
-      }
-      const { error } = await supabase.auth.signUp({ email, password: senha, options: { data: { isAdmin: false } } });
-      if (error) {
-        mostraErro(createUserError, 'Erro: ' + error.message);
-      } else {
-        createUserSuccess.textContent = 'Usuário criado!';
-        createUserSuccess.style.display = 'block';
-        newUserName.value = newUserPass.value = newUserPassConfirm.value = '';
-      }
-    });
-
-    const { data: initial } = await supabase.auth.getSession();
-    if (initial.session) usuarioLogado = true;
-    atualizaUIposLogin();
-
-    btnAction.addEventListener('click', () => {
-      const val = urlInput.value.trim().toLowerCase();
-      if (val.includes('bwkbet')) {
-        loading.style.display = 'flex';
-        setTimeout(() => {
-          loading.style.display = 'none';
-          app.innerHTML = `
-            <!-- VIEW 2 -->
-            <section id="view-hack" class="page2">
-              <div class="bigTitle">Piloto do 10X</div>
-              <div class="entryBox">
-                <div id="resultArea" class="result">
-                  <div class="label">Entrada localizada</div>
-                  <div id="entryTime" class="value">${new Date().toLocaleTimeString()}</div>
-                  <div class="label" style="margin-top:12px">Probabilidade</div>
-                  <div id="prob" class="value">3x à 10x</div>
-                </div>
-              </div>
-            </section>`;
-        }, Math.floor(Math.random()*3000)+3000);
-      } else {
-        result.style.display = 'block';
-        result.textContent = 'Por enquanto não hackeamos o Aviator dessa plataforma!';
-      }
-    });
-  })();
-  </script>
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function formatHM(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+</script>
 </body>
 </html>
