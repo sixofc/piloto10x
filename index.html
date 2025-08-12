@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Piloto do 10X</title>
   <style>
-    /* === MANTIDO SEU CSS ORIGINAL === */
     :root {
       --accent: #ff4757;
       --card-bg: rgba(10,14,20,0.6);
@@ -173,7 +172,6 @@
 </head>
 <body>
 
-  <!-- LOGIN -->
   <section id="login-section">
     <div class="card">
       <h1 class="mainTitle" style="text-align:center;">Login</h1>
@@ -190,15 +188,12 @@
     </div>
   </section>
 
-  <!-- Botão desconectar -->
   <button id="btnLogout">Desconectar</button>
 
-  <!-- APP -->
   <div id="app" style="display:none;">
     <div class="wrap">
       <div class="card" role="main">
 
-        <!-- VIEW 1 -->
         <section id="view-landing" class="center">
           <h1 class="mainTitle">Piloto do 10X</h1>
           <p class="subtitle">Instagram: @pilotodo10x</p>
@@ -216,7 +211,6 @@
           <div id="landingError" class="error" style="display:none"></div>
         </section>
 
-        <!-- VIEW 2 -->
         <section id="view-hack" class="page2">
           <div class="bigTitle">Piloto do 10X</div>
           <div class="entryBox">
@@ -307,7 +301,6 @@
     }
   });
 
-  // --- Mantive seu código original da parte "hack" abaixo ---
   const viewLanding = document.getElementById('view-landing');
   const viewHack = document.getElementById('view-hack');
   const urlInput = document.getElementById('urlInput');
@@ -381,7 +374,7 @@
       const entry = new Date(now.getTime() + addMin * 60 * 1000);
       activeEntryDate = entry;
       entryTimeEl.textContent = formatHM(entry);
-      probEl.textContent = '2x à 10x';
+      probEl.textContent = '10x à 100x';
       resultArea.style.display = 'block';
       startCheckLoop();
     }, waitSeconds * 1000);
@@ -392,3 +385,4 @@
 </script>
 </body>
 </html>
+
